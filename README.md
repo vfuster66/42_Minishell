@@ -1,22 +1,22 @@
 # 42-Minishell
 Aussi mignon qu'un vrai shell
 
-## Sujet
+## Partie obligatoire
 Écrivez un shell qui doit :
 - Afficher un prompt en l’attente d’une nouvelle commande
 - Posséder un historique fonctionnel
 - Chercher et lancer le bon executable (basé sur une variable d’environnement `PATH` ou en utilisant un path absolu), comme dans `bash`
 - Utiliser une variable globale au maximum
-  
-### Builtins
-Vous devez implémenter les builtins suivants :
-  - `echo` et l’option `-n`
-  - `cd` uniquement avec un chemin absolu ou relatif
-  - `pwd` sans aucune option
-  - `export` sans aucune option
-  - `unset` sans aucune option
-  - `env` sans aucune option ni argument
-  - `exit` sans aucune option
+- Ne pas interpréter les quotes non fermés
+- Ne pas interpréter les caractères spéciaux non demandés
+- Gérer `'` qui doit empêcher le shel d'interpréter les méta-caractères présents dans la séquence entre guillemets
+- Gérer `"` qui doit empêcher le shel d'interpréter les méta-caractères présents dans la séquence entre guillemets sauf `$`
+
+### Redirections
+- `<` doit rediriger l'entrée
+- `>` doit rediriger la sortie
+- `<<` doit recevoir un délimiteur et lire l'input donné jusqu'à rencontrer une ligne contenant le délimiteur. L'historique ne doit pas être mis à jour
+- `>>` doit rediriger la sortie en mode append 
     
 - `;` dans la ligne de commande doit séparer les commandes
 - `'` et `"` doivent marcher comme dans bash, à l’exception du multiligne
@@ -30,7 +30,15 @@ Vous devez implémenter les builtins suivants :
 - `ctrl-D` quitte le shell
 - `ctrl-\` ne fait rien
 
-## Notes
+### Builtins
+Vous devez implémenter les builtins suivants :
+  - `echo` et l’option `-n`
+  - `cd` uniquement avec un chemin absolu ou relatif
+  - `pwd` sans aucune option
+  - `export` sans aucune option
+  - `unset` sans aucune option
+  - `env` sans aucune option ni argument
+  - `exit` sans aucune option
 
 ### Fonctions autorisées
 - `fork` : créé un nouveau processus enfant
