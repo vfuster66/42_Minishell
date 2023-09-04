@@ -22,17 +22,19 @@ Aussi mignon qu'un vrai shell
 - `closedir` : referme le ficher descriptif du dossier
 - `pipe` : rempli un tableau avec deux nouveaux file descriptors qui vont être utiles pour changer l'entrée standard et la sortie standard
 
-# Sources
+## Sources
 
-https://www.codequoi.com/creer-et-tuer-des-processus-fils-en-c/
-
-https://www.codequoi.com/pipe-une-methode-de-communication-inter-processus/
-
-https://www.codequoi.com/envoyer-et-intercepter-un-signal-en-c/
-
-https://www.codequoi.com/manipuler-un-fichier-a-laide-de-son-descripteur-en-c/
-
-https://www.codequoi.com/errno-et-la-gestion-derreur-en-c/
+- https://shell.multun.net/structure.html
+- https://shell.figarola.fr/x212.html
+- https://n-pn.fr/t/2318-c--programmation-systeme-execve-fork-et-pipe
+- https://shell.figarola.fr/x54.html
+- http://www.zeitoun.net/articles/communication-par-tuyau/start
+- https://www.geeksforgeeks.org/fork-system-call/
+- https://www.codequoi.com/creer-et-tuer-des-processus-fils-en-c/
+- https://www.codequoi.com/pipe-une-methode-de-communication-inter-processus/
+- https://www.codequoi.com/envoyer-et-intercepter-un-signal-en-c/
+- https://www.codequoi.com/manipuler-un-fichier-a-laide-de-son-descripteur-en-c/
+- https://www.codequoi.com/errno-et-la-gestion-derreur-en-c/
 
 
 
