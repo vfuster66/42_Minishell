@@ -1,18 +1,6 @@
 # 42-Minishell
 Aussi mignon qu'un vrai shell
 
-# Sources
-
-https://www.codequoi.com/creer-et-tuer-des-processus-fils-en-c/
-
-https://www.codequoi.com/pipe-une-methode-de-communication-inter-processus/
-
-https://www.codequoi.com/envoyer-et-intercepter-un-signal-en-c/
-
-https://www.codequoi.com/manipuler-un-fichier-a-laide-de-son-descripteur-en-c/
-
-https://www.codequoi.com/errno-et-la-gestion-derreur-en-c/
-
 # Notes
 
 Fonctions autorisées
@@ -34,4 +22,18 @@ Fonctions autorisées
     readdir : lit l'entrée suivante dans le fichier descriptif du dossier
     closedir : referme le ficher descriptif du dossier
     pipe : rempli un tableau avec deux nouveaux file descriptors qui vont être utiles pour changer l'entrée standard et la sortie standard
+
+# Sources
+
+https://www.codequoi.com/creer-et-tuer-des-processus-fils-en-c/
+
+https://www.codequoi.com/pipe-une-methode-de-communication-inter-processus/
+
+https://www.codequoi.com/envoyer-et-intercepter-un-signal-en-c/
+
+https://www.codequoi.com/manipuler-un-fichier-a-laide-de-son-descripteur-en-c/
+
+https://www.codequoi.com/errno-et-la-gestion-derreur-en-c/
+
+
 
