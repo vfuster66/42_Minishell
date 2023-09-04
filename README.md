@@ -47,7 +47,7 @@ Vous devez implémenter les builtins suivants :
 - `getcdw` : pour obtenir le pwd
 - `stat` : donne toutes les infos d'un fichier comme un ls
 - `lstat` : same sauf que dans le cas d'un lien donne les infos sur le lien et pas le fichier pointé
-- `ftat` : donne toutes les infos sur un fichier comme un ls, mais cette fois on lui passe en argument le file descriptor
+- `fstat` : donne toutes les infos sur un fichier comme un ls, mais cette fois on lui passe en argument le file descriptor
 - `kill` : envoie un signal d'arrêt au processus indiqué
 - `signal(sig, fun)` : exécute `fun` si `sig` est reçu
 - `execve` : exécuter un exécutable, avec ses arguments et l'environnement en paramètres
