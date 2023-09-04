@@ -64,6 +64,19 @@ Vou devez implémenter :
 - `closedir` : referme le ficher descriptif du dossier
 - `pipe` : rempli un tableau avec deux nouveaux file descriptors qui vont être utiles pour changer l'entrée standard et la sortie standard
 
+### Valeurs de retour
+
+| Value | Signification |
+|----:|:-------------|
+| 1 | Catchall for general errors	impermissible operations |
+| 2 | Misuse of shell builtins |
+| 126	| Command invoked cannot execute (permission problem or not an executable) |
+| 127	| Command not found |
+| 128	| Invalid argument to exit |
+| 128+n | Error signal n |
+| 130	| Script terminated by Control-C |
+| 255 | Exit status out of range |
+
 ## Sources
 
 - https://shell.multun.net/structure.html
