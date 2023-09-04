@@ -40,6 +40,11 @@ Vous devez implémenter les builtins suivants :
   - `env` sans aucune option ni argument
   - `exit` sans aucune option
 
+## Partie bonus
+Vou devez implémenter :
+- `&&` et `||` avec des parenthèses pour les priorités
+- Les wildcards `*` doivent fonctionner pour le répertoire courant
+
 ### Fonctions autorisées
 - `fork` : créé un nouveau processus enfant
 - `wait` : attend un signal d'arrêt d'un processus, wait4 pour attendre la fin d'un processus précis
