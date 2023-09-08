@@ -1,42 +1,53 @@
 # Compiler options
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -gdwarf-4 -g
-LDFLAGS = -Llibft -lft -lreadline -lncurses
+CFLAGS = -Werror -Wall -Wextra -gdwarf-4 -g3
+
+# Output executable name
+NAME = minishell
+
+# Directories
+SRC_PATH = sources
+OBJ_PATH = objects
 
 # Source files
-SRC_DIR = src
-SRC_FILES = main.c
-
-SRCS = $(addprefix $(SRC_DIR)/, $(SRC_FILES))
+SRC = main.c ft_strcmp.c ft_calloc.c ft_isdigit.c \
+      ft_isspace.c ft_strdup.c ft_strjoin.c ft_strtrim.c \
+      ft_isalnum.c ft_isalpha.c ft_itoa.c ft_memset.c \
+      ft_substr.c ft_split.c ft_strchr.c ft_putchar_fd.c \
+      ft_putendl_fd.c ft_putstr_fd.c ft_strlcpy.c ft_strlen.c \
+      ft_strncmp.c
 
 # Object files
-OBJ_DIR = obj
-OBJ_FILES = $(SRC_FILES:.c=.o)
-OBJS = $(addprefix $(OBJ_DIR)/, $(OBJ_FILES))
+OBJ = $(SRC:.c=.o)
+OBJS = $(addprefix $(OBJ_PATH)/, $(OBJ))
 
-# Executable name
-EXEC = minishell
+# Include directories
+INC = -I includes
 
-# Header files
-INCLUDES = -Ilibft -Iinclude
+# Libraries
+LIBS = -lreadline
 
 # Targets
-all: $(EXEC)
+all: $(NAME)
 
-$(EXEC): $(OBJS)
-	$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS) -o $(EXEC)
+$(OBJ_PATH)/%.o: $(SRC_PATH)/%.c
+	@mkdir -p $(OBJ_PATH)
+	@$(CC) $(CFLAGS) $(INC) -c $< -o $@
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	@mkdir -p $(OBJ_DIR)
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+$(NAME): $(OBJS)
+	@$(CC) $(CFLAGS) $(OBJS) -o $@ $(LIBS)
+	@echo "Minishell compiled"
 
 clean:
-	rm -rf $(OBJ_DIR)
+	@rm -rf $(OBJ_PATH)
 
 fclean: clean
-	rm -f $(EXEC)
+	@rm -f $(NAME)
+	@echo "🧽 🪣 🧹 Minishell cleaned"
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all re clean fclean
+
+
 
