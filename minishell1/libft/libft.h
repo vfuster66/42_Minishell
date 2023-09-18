@@ -6,7 +6,7 @@
 /*   By: vfuster- <vfuster-@student.42perpignan.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 09:55:17 by vfuster-          #+#    #+#             */
-/*   Updated: 2023/06/30 08:11:47 by vfuster-         ###   ########.fr       */
+/*   Updated: 2023/09/18 10:35:29 by vfuster-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,9 @@ long	ft_strtol(const char *str, char **endptr, int base);
 int		ft_strcmp(const char *s1, const char *s2);
 char	*ft_realloc(char *dest, int size);
 char	*ft_strcpy(char *dest, const char *src);
-char	*ft_strtok(char *str, const char *delimiters);
+char 	*ft_strtok(char *str, const char *delimiters);
+char	*ft_strcat(char *dest, const char *src);
+char	*ft_strtok_r(char *str, const char *delim, char **saveptr);
+char	*ft_strpbrk(const char *s1, const char *s2);
 
 #endif

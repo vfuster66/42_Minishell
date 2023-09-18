@@ -1,27 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_realloc.c                                       :+:      :+:    :+:   */
+/*   ft_strtok_r.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vfuster- <vfuster-@student.42perpignan.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/18 09:17:31 by vfuster-          #+#    #+#             */
-/*   Updated: 2023/09/18 09:17:34 by vfuster-         ###   ########.fr       */
+/*   Created: 2023/09/18 09:12:36 by vfuster-          #+#    #+#             */
+/*   Updated: 2023/09/18 09:15:49 by vfuster-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <stdlib.h>
 
-char	*ft_realloc(char *dest, int size)
+char	*ft_strtok_r(char *str, const char *delim, char **saveptr)
 {
-	char	*tmp;
-	int		len;
+	char	*token;
 
-	len = ft_strlen(dest);
-	tmp = malloc(len + size + 1);
-	if (!tmp)
+	if (str != NULL)
+	{
+		*saveptr = str;
+	}
+	if (*saveptr == NULL || **saveptr == '\0')
+	{
 		return (NULL);
-	ft_memcpy(tmp, dest, len + 1);
-	free(dest);
-	return (tmp);
+	}
+	token = *saveptr;
+	*saveptr = ft_strpbrk(token, delim);
+	if (*saveptr != NULL)
+	{
+		*(*saveptr)++ = '\0';
+	}
+	return (token);
 }

@@ -6,7 +6,7 @@
 /*   By: vfuster- <vfuster-@student.42perpignan.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 07:35:25 by vfuster-          #+#    #+#             */
-/*   Updated: 2023/09/11 12:07:37 by vfuster-         ###   ########.fr       */
+/*   Updated: 2023/09/18 17:35:35 by vfuster-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,15 +92,14 @@ void execute_unset(char *var_name)
     }
 }
 
-void execute_env()
+void execute_env(char **env_cpy)
 {
-    extern char **environ;
     char *env_var;
     int i = 0;
 
-    while (environ[i] != NULL)
+    while (env_cpy[i] != NULL)
     {
-        env_var = environ[i];
+        env_var = env_cpy[i];
         printf("%s\n", env_var);
         i++;
     }
@@ -139,7 +138,7 @@ void execute_builtin(const char *command, char **arguments, int argument_count)
     else if (strcmp(command, "unset") == 0)
         execute_unset(arguments[1]);
     else if (strcmp(command, "env") == 0)
-        execute_env();
+        execute_env(env_copy);
     else if (strcmp(command, "exit") == 0)
         execute_exit(0);
 }
@@ -194,28 +193,37 @@ char *process_quote(char *input) {
 }
 
 
-int	execute_command(t_command *command)
+int execute_command(t_command *command)
 {
-	int	status;
+    int status;
+    pid_t child_pid = fork();
 
-	if (fork() == 0)
-	{
-		execvp(command->arguments[0], command->arguments);
-		perror("Erreur lors de l'execution de la commande");
-		exit(EXIT_FAILURE);
-	}
-	else
-	{
-		wait(&status);
-		command->last_exit_status = WEXITSTATUS(status);
-	}
-	return (0);
+    if (child_pid == -1)
+    {
+        perror("fork");
+        exit(EXIT_FAILURE);
+    }
+    if (child_pid == 0)
+    {
+        char *command_path = "/tmp/.minishell_heredoc_";
+        char *const argv[] = {command_path, command->arguments[0], NULL};
+        execve(command_path, argv, NULL);
+        perror("Erreur lors de l'exécution de la commande");
+        exit(EXIT_FAILURE);
+    }
+    else
+    {
+        wait(&status);
+        command->last_exit_status = WEXITSTATUS(status);
+    }
+    return 0;
 }
+
 
 void	ctrl_c_handler(int signo)
 {
 	(void)signo;
-	ctrl_c_pressed = 1;
+	//ctrl_c_pressed = 1;
 }
 
 void	ctrl_d_handler(int signo)
@@ -361,53 +369,77 @@ void disable_canonical_mode()
     tcsetattr(STDIN_FILENO, TCSANOW, &new_termios);
 }
 
-int main() {
-    char *input;
-    t_command command;
-    struct termios orig_termios;
-    struct termios new_termios;
+char **copy_tab_strs(char **env)
+{
+    char    **copie_tab;
+    int     i;
 
-	disable_canonical_mode();
-    tcgetattr(STDIN_FILENO, &orig_termios);
-    new_termios = orig_termios;
-    new_termios.c_lflag &= ~(ICANON | ECHO);
-    tcsetattr(STDIN_FILENO, TCSANOW, &new_termios);
-    signal(SIGINT, ctrl_c_handler);
-    signal(SIGQUIT, SIG_IGN);
-	rl_bind_key('\t', rl_complete);
-    while (1) {
-        if (ctrl_c_pressed) {
-            ctrl_c_pressed = 0;
-            printf("\nminishell> ");
-            fflush(stdout);
-        }
-        input = readline("minishell> ");
-        if (!input) {
-            printf("Au revoir !\n");
-            break ;
-        }
-        if (ft_strlen(input) > 0) {
-            add_history(input);
-        }
-        printf("Commande saisie : %s\n", input);
-
-        if (ft_strcmp(input, "exit") == 0) {
-            printf("Au revoir !\n");
-            free(input);
-            break;
-        }
-        if (est_builtin(input))
-            execute_builtin(input, command.arguments, command.argument_count);
-        else {
-            tokenize_command(input, &command);
-            analyze_tokens(&command);
-            execute_command(&command);
-        }
-        free(input);
+    i = 0;
+    while (env[i])
+        i++;
+    copie_tab = (char **)malloc(sizeof(char *) * (i + 1));
+    if (!copie_tab)
+        return (NULL);
+    i = 0;
+    while (env[i])
+    {
+        copie_tab[i] = env[i];
+        i++;
     }
-    clear_history();
-    tcsetattr(STDIN_FILENO, TCSANOW, &orig_termios);
-    return 0;
+    copie_tab = NULL;
+    return (copie_tab);
 }
 
+int main(int ac, char **av, char **env)
+{
+    (void)ac;
+    (void)av;
+    // Initialiser le gestionnaire de signaux Ctrl+C (SIGINT) et Ctrl+D (EOF)
+    signal(SIGINT, ctrl_c_handler);
+    signal(SIGTSTP, ctrl_d_handler);
+
+    // Copier l'environnement dans une variable locale
+    env_copy = copy_tab_strs(env);
+    if (env_copy == NULL)
+    {
+        perror("Erreur lors de la copie de l'environnement");
+        exit(EXIT_FAILURE);
+    }
+    while (1)
+    {
+        // Lire l'entrée de l'utilisateur
+        char *input = read_user_input();
+
+        // Si l'entrée est vide, continuer à la prochaine itération
+        if (input[0] == '\0')
+            continue;
+
+        // Analyser la commande pour la redirection, les pipes, etc.
+        t_command command;
+        tokenize_command(input, &command);
+        analyze_tokens(&command);
+
+        // Vérifier si la commande est un built-in
+        if (est_builtin(command.command_name))
+        {
+            execute_builtin(command.command_name, command.arguments, command.argument_count);
+        }
+        else
+        {
+            // TODO: Exécuter une commande externe ici (non implémenté dans le code fourni)
+        }
+
+        // Libérer la mémoire
+        free(command.command_name);
+        for (int i = 0; i < command.argument_count; i++)
+        {
+            free(command.arguments[i]);
+        }
+
+        // Libérer la mémoire allouée pour l'entrée utilisateur
+        free(input);
+    }
+
+    return 0;
+}
 

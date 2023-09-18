@@ -70,6 +70,9 @@ SRCS := ft_strjoin.c \
 	ft_realloc.c \
 	ft_strcpy.c \
 	ft_strtok.c \
+	ft_strtok_r.c \
+	ft_strpbrk.c \
+	ft_strcat.c \
 
 OBJS := $(SRCS:.c=.o)
 

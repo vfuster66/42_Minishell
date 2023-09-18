@@ -6,7 +6,7 @@
 /*   By: vfuster- <vfuster-@student.42perpignan.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 09:20:13 by vfuster-          #+#    #+#             */
-/*   Updated: 2023/02/16 09:09:04 by vfuster-         ###   ########.fr       */
+/*   Updated: 2023/09/14 10:46:45 by vfuster-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,4 +36,4 @@ int	ft_strncmp(char const *s1, char const *s2, size_t n)
 	if ((unsigned char)*s1 == (unsigned char)*s2)
 		return (0);
 	return ((unsigned char)*s1 - (unsigned char)*s2);
-}	
+}

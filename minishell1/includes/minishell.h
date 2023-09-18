@@ -6,7 +6,7 @@
 /*   By: vfuster- <vfuster-@student.42perpignan.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 07:34:39 by vfuster-          #+#    #+#             */
-/*   Updated: 2023/09/11 12:05:15 by vfuster-         ###   ########.fr       */
+/*   Updated: 2023/09/18 17:32:51 by vfuster-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,41 +14,53 @@
 # define MINISHELL_H
 
 /*-- Bibliotheques --*/
-# include <stdlib.h>
-# include <stdio.h>
-# include <unistd.h>
-# include <limits.h>
-# include <string.h>
-# include <readline/readline.h>
-# include <readline/history.h>
-# include <signal.h>
-# include <termios.h>
-# include <sys/wait.h>
-# include <errno.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <string.h>
+#include <readline/readline.h>
+#include <readline/history.h>
+#include <signal.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <errno.h>
+#include <termios.h>
 
 # include "../libft/libft.h"
 
-# define MAX_TOKENS 64
+# define MAX_TOKENS 100
+# define MAX_PATH_LENGTH 1024
+# define PATH_MAX 4096
 
 /*-- Structures --*/
 typedef struct s_command
 {
-    char 	*command_name;          // Nom de la commande
-    char 	*arguments[MAX_TOKENS]; // Tableau d'arguments
-    int 	argument_count;         // Nombre d'arguments
-	int		last_exit_status;		// Stocker le statut de sortie
-    char 	*input_redirection;     // Redirection de l'entrée
-    char 	*output_redirection;    // Redirection de la sortie
-    int 	append_output;          // Indicateur de redirection en mode append
-    int 	has_pipe;               // Indicateur de pipe
-    char 	*pipe_command;          // Commande pour le pipe
-} 			t_command;
+    char        *command_name;
+    char        *arguments[MAX_TOKENS];
+    int         argument_count;
+    char        *input_redirection;
+    char        *output_redirection;
+    int         append_output;
+    char        *here_document;
+    int         has_pipe;
+    char        *pipe_command;
+    int         last_exit_status;
+}               t_command;
+
+typedef struct EnvironmentVariable {
+    char *name;
+    char *value;
+    struct EnvironmentVariable *next;
+} EnvironmentVariable;
 
 /*-- Variable globale --*/
-int	ctrl_c_pressed = 0;
+char **env_copy = NULL;
 
 /*-- Fonctions --*/
 char	*read_user_input();
+void    clear_tokens(t_command *command);
 void 	tokenize_command(const char *input, t_command *command);
 void 	analyze_tokens(t_command *cmd);
 void	ctrl_d_handler(int signo);
@@ -67,5 +79,9 @@ void 	execute_exit(int exit_status);
 int 		est_builtin(const char *command);
 void 	execute_builtin(const char *command, char **arguments, int argument_count);
 void 	disable_canonical_mode();
+char    *trouver_chemin_absolu(const char *command_name);
+int         execute_pipeline(char *commands[MAX_TOKENS], int num_commands);
+void    substitute_environment_variables(char *command);
+char    **copy_tab_strs(char **env);
 
 #endif
