@@ -1,3 +1,5 @@
+![image](https://github.com/vfuster66/42-Minishell/assets/124174795/a3b1966a-0225-42f5-94fd-2608c06fbf34)
+
 # 42-Minishell
 Aussi mignon qu'un vrai shell
 
